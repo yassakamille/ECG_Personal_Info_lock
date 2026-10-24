@@ -2,42 +2,44 @@
 Human Computer Interaction
 [![Architecture diagram of yassakamille/ecg_personal_info_lock](https://gitdiagram.com/yassakamille/ecg_personal_info_lock/diagram.png)](https://gitdiagram.com/yassakamille/ecg_personal_info_lock?utm_source=readme&utm_medium=picture)
 
-## ECG Personal Information Lock — Architecture
+
+## ECG-Based Personal Information Lock Workflow
 
 ```mermaid
 flowchart TD
 
 subgraph group_interface["Desktop Interface"]
-  node_gui["Authentication GUI<br/>GUI.py"]
-  node_identity["Identity Mapping<br/>GUI.py"]
+  node_gui["Authentication GUI<br/>[GUI.py]"]
+  node_identity["Identity Mapping<br/>[GUI.py]"]
 end
 
 subgraph group_signal["ECG Processing"]
-  node_processor["ECG Processor<br/>main.py"]
+  node_processor["ECG Feature Extraction<br/>[main.py]"]
   node_training_data[("Training ECG Files")]
 end
 
-subgraph group_learning["Model Training and Inference"]
-  node_training["Classifier Training<br/>main.py"]
+subgraph group_learning["Model Training"]
+  node_training["Classifier Training<br/>[main.py]"]
   node_models[("Classifier Artifacts")]
 end
 
 node_user(("User"))
 
-node_user -->|"selects ECG"| node_gui
-node_gui -->|"processes file"| node_processor
-node_processor -->|"returns features"| node_gui
-node_training -->|"reads CSVs"| node_training_data
-node_gui -->|"loads classifier"| node_models
-node_gui -->|"maps majority class"| node_identity
-node_identity -->|"shows identity"| node_user
+node_user -->|"Selects ECG"| node_gui
+node_gui -->|"Processes file"| node_processor
+node_processor -->|"Returns features"| node_gui
+node_gui -->|"Loads classifier"| node_models
+node_gui -->|"Maps majority class"| node_identity
+node_identity -->|"Shows identity"| node_user
+node_training -->|"Reads CSVs"| node_training_data
+node_training -->|"Writes classifiers"| node_models
 
 click node_gui "https://github.com/yassakamille/ecg_personal_info_lock/blob/main/GUI.py"
+click node_identity "https://github.com/yassakamille/ecg_personal_info_lock/blob/main/GUI.py"
 click node_processor "https://github.com/yassakamille/ecg_personal_info_lock/blob/main/main.py"
 click node_training_data "https://github.com/yassakamille/ecg_personal_info_lock/tree/main/data"
 click node_training "https://github.com/yassakamille/ecg_personal_info_lock/blob/main/main.py"
 click node_models "https://github.com/yassakamille/ecg_personal_info_lock/tree/main/models"
-click node_identity "https://github.com/yassakamille/ecg_personal_info_lock/blob/main/GUI.py"
 
 classDef toneNeutral fill:#f8fafc,stroke:#334155,stroke-width:1.5px,color:#0f172a
 classDef toneBlue fill:#dbeafe,stroke:#2563eb,stroke-width:1.5px,color:#172554
